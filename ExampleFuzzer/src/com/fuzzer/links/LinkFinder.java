@@ -2,7 +2,6 @@ package com.fuzzer.links;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -15,9 +14,8 @@ public class LinkFinder {
 	private HtmlPage currentPage;
 	WebClient client;
 	
-	public LinkFinder(String page){
-		client = new WebClient();
-//		client.setJavaScriptEnabled(true);
+	public LinkFinder(String page, WebClient client){
+		this.client = client;
 		try {
 			currentPage = client.getPage(page);
 		} catch (FailingHttpStatusCodeException e) {
@@ -33,7 +31,4 @@ public class LinkFinder {
 		return currentPage.getAnchors();
 	}
 	
-	public ArrayList<String> findURLLinks(){
-		return null;
-	}
 }
