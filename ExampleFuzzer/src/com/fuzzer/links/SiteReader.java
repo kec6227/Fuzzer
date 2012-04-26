@@ -14,7 +14,7 @@ public class SiteReader {
 	private static final boolean COMPLETE_PARSING = true; //Random page/input when false
 	private static final boolean GUESS_PASSWORDS = false;
 	
-	private static final String SITE = "http://vm549-03b.se.rit.edu/Home?access_token=AAAEsT22mZAJcBAHdIXUTAoZAGjSizKZA0ZCkkJX6eQnht8c7616n3WVAkBbmLHfOms55l3KLbyFdnR92Sbmh6BFPlSbim9CDoToiNbLzIwZDZD#_=_";
+	private static final String SITE = "http://localhost:8080/bodgeit";
 	
 	//For the Web Engineering class
 	private static final String SITE_ROOT = "http://vm549-03b.se.rit.edu";
