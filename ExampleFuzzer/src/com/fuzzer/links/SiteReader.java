@@ -21,10 +21,10 @@ public class SiteReader {
 	private static final boolean COMPLETE_PARSING = true; //Random page/input when false
 	private static final boolean GUESS_PASSWORDS = false;
 	
-	private static final String SITE = "http://vm549-03b.se.rit.edu/Home?access_token=AAAEsT22mZAJcBAKLNiPr55Lo7qsZB5ZBCGMZCvrzZC7MqhJnVd6lzWIagOOYpoBo5XSI4DUhBC6rkbkD6QKGIZAfyJXm3CNMWI6zbyT9U32wZDZD#_=_";
+	private static final String SITE = "http://localhost:8080/bodgeit";
 	
 	// Toggle on when fuzzing the other class' site
-	private static final boolean FUZZING_WEB_CLASS = true;
+	private static final boolean FUZZING_WEB_CLASS = false;
 	
 	//For the Web Engineering class
 	private static final String SITE_ROOT = "http://vm549-03b.se.rit.edu";
