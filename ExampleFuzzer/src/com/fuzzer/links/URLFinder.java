@@ -137,7 +137,11 @@ public class URLFinder {
 				elements.addAll(form.getElementsByTagName("select"));
 				elements.addAll(form.getElementsByTagName("textarea"));
 				for (HtmlElement e : elements) {
-					args.add(e.getAttribute("name"));
+					String name = e.getAttribute("name");
+					if (!name.isEmpty()) {
+						args.add(name);
+						target.sampleValues.put(name, e.getAttribute("value"));
+					}
 				}
 				if (methodIsPost) {
 					target.postArgs.addAll(args);
@@ -189,8 +193,13 @@ public class URLFinder {
 	            try {
 					String key = URLDecoder.decode(pair[0], "UTF-8");
 					target.getArgs.add(key);
+					if (pair.length > 1) {
+						String value = URLDecoder.decode(pair[1], "UTF-8");
+						target.sampleValues.put(key, value);
+					}
 				} catch (UnsupportedEncodingException e) {
 					target.getArgs.add(pair[0]);
+					target.sampleValues.put(pair[0], pair[1]);
 				}
 	        }
 		}

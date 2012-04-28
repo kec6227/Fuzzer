@@ -2,6 +2,8 @@ package com.fuzzer.links;
 
 import java.util.List;
 
+import org.apache.commons.logging.LogFactory;
+
 
 import com.fuzzer.config.Config;
 import com.fuzzer.exploits.XSSExploit;
@@ -9,6 +11,11 @@ import com.gargoylesoftware.htmlunit.WebClient;
 
 
 public class SiteReader {
+
+	static {
+		// This disables the HTMLUnit apache logging
+		LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+	}
 
 	private static WebClient client;
 	
