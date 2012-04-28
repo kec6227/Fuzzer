@@ -7,7 +7,10 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.fuzzer.config.Config;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -25,21 +28,40 @@ public class URLFinder {
 		this.client = client;
 	}
 	
-	
 	public ArrayList<URLTarget> findTargetsFrom(String url) {
-		//TODO: Page Discovery
 		ArrayList<URLTarget> targets = new ArrayList<URLTarget>();
+		Queue<String> queue = new ConcurrentLinkedQueue<String>();
+		HashSet<String> visited = new HashSet<String>();
+		
+		queue.add(url);
+		
+		while (!queue.isEmpty()) {
+			String next = queue.poll();
+			if (visited.contains(next)) {
+				continue;
+			}
+			visited.add(next);
+			ArrayList<URLTarget> found = getTargetsOn(next);
+			targets.addAll(found);
+			for (URLTarget sample : found) {
+				queue.addAll(sample.samplePages);
+			}
+			try {
+				Thread.sleep(Config.TIME_GAP_MS);
+			} catch (InterruptedException e) {
+			}
+		}
 		
 		if (Config.PAGE_INPUT_MERGE) {
 			targets = mergeTargets(targets);
 		}
 		
-		return null;
+		return targets;
 	}
 	
 	
 	public ArrayList<URLTarget> getTargetsOn(String url) {
-		System.out.println("Finding ALL Links On: " + url);
+		System.out.println("\nFinding ALL Links On: " + url);
 		HtmlPage page = null;
 		
 		try {
@@ -101,8 +123,12 @@ public class URLFinder {
 		List<HtmlForm> forms = page.getForms();
 		ArrayList<URLTarget> targets = new ArrayList<URLTarget>();
 		for (HtmlForm form : forms) {
+			String action = form.getActionAttribute();
+			if (action.isEmpty()) {
+				action = page.getUrl().toExternalForm();
+			}
 			boolean methodIsPost = form.getMethodAttribute().equalsIgnoreCase("post");
-			URLTarget target = parseURL(page, form.getActionAttribute());
+			URLTarget target = parseURL(page, action);
 			if (target != null) {
 				targets.add(target);
 				ArrayList<String> args = new ArrayList<String>();
@@ -133,12 +159,15 @@ public class URLFinder {
 		try {
 			fqUrl = page.getFullyQualifiedUrl(url);
 		} catch (MalformedURLException e) {
+			e.printStackTrace();
 			return null;
 		}
+		
 		// Only handle http(s)
 		if (!fqUrl.getProtocol().startsWith("http")) {
 			return null;
 		}
+		
 		// Stay on target site
 		URL targetSite = null;
 		try {
@@ -147,13 +176,14 @@ public class URLFinder {
 			return null;
 		}
 		if (!fqUrl.getHost().equalsIgnoreCase(targetSite.getHost())) {
+			System.out.println("Ignoring: " + fqUrl);
 			return null;
 		}
 		
 		// Create the target
 		URLTarget target = new URLTarget(fqUrl.toExternalForm().split("\\?|\\#")[0]);
+		target.samplePages.add(fqUrl.toExternalForm());
 		if (fqUrl.getQuery() != null) {
-			target.samplePages.add(fqUrl.toExternalForm());
 			for (String param : fqUrl.getQuery().split("&")) {
 	            String pair[] = param.split("=");
 	            try {

@@ -1,14 +1,11 @@
 package com.fuzzer.links;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-import org.apache.commons.logging.LogFactory;
 
 import com.fuzzer.config.Config;
+import com.fuzzer.exploits.XSSExploit;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 
 
 public class SiteReader {
@@ -20,7 +17,7 @@ public class SiteReader {
 		client.setJavaScriptEnabled(true);
 		
 		URLFinder finder = new URLFinder(client);
-		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.getTargetsOn(Config.TARGET) : finder.findTargetsFrom(Config.TARGET);
+		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.findTargetsFrom(Config.TARGET) : finder.getTargetsOn(Config.TARGET);
 		printLinks(targets);
 		
 		for (URLTarget target : targets) {
@@ -29,19 +26,13 @@ public class SiteReader {
 	}
 	
 	public static void runExploitsOnPage(URLTarget target){
-		
+		XSSExploit.exploitBasicXSS(client, target);
 	}
 	
 	private static void printLinks(List<URLTarget> targets){
-		System.out.println("\nAll links:\n\n");
+		System.out.println("\nAll links:");
 		for (URLTarget target : targets) {
-			System.out.println(target.page);
-			if (!target.getArgs.isEmpty()) {
-				System.out.println("	GET: " + Arrays.toString(target.getArgs.toArray(new String[]{})));
-			}
-			if (!target.postArgs.isEmpty()) {
-				System.out.println("	POST: " + Arrays.toString(target.postArgs.toArray(new String[]{})));
-			}
+			target.print();
 		}
 		System.out.println("Total Targets: " + targets.size());
 	}
