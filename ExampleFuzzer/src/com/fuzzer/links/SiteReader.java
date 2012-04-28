@@ -1,88 +1,48 @@
 package com.fuzzer.links;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.logging.LogFactory;
 
+import com.fuzzer.config.Config;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 
 
 public class SiteReader {
 
-	static {
-		// This disables the HTMLUnit apache logging
-		LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-	}
-	
-	private static final boolean PAGE_DISCOVERY = true;
-	private static final boolean PAGE_GUESSING = false;
-	private static final boolean COMPLETE_PARSING = true; //Random page/input when false
-	private static final boolean GUESS_PASSWORDS = false;
-	
-	private static final String SITE = "http://localhost:8080/bodgeit";
-	
-	// Toggle on when fuzzing the other class' site
-	private static final boolean FUZZING_WEB_CLASS = false;
-	
-	//For the Web Engineering class
-	private static final String SITE_ROOT = "http://vm549-03b.se.rit.edu";
-	private static HashSet<String> totalPages = new HashSet<String>();
-	
-	private static HashSet<String> visitedPages = new HashSet<String>();
-	
 	private static WebClient client;
 	
 	public static void main(String[] args){
 		client = new WebClient();
 		client.setJavaScriptEnabled(true);
 		
-		LinkFinder finder = new LinkFinder(SITE, client);
-		List<HtmlAnchor> links = finder.findAllLinks();
+		URLFinder finder = new URLFinder(client);
+		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.getTargetsOn(Config.TARGET) : finder.findTargetsFrom(Config.TARGET);
+		printLinks(targets);
 		
-		getLinks(links);
-		
-		if(PAGE_DISCOVERY){
-			printLinks();
+		for (URLTarget target : targets) {
+			runExploitsOnPage(target);
 		}
 	}
 	
-	public static void getLinks(List<HtmlAnchor> links){
-		if(links==null){
-			return;
-		}
-		for(HtmlAnchor link: links){
-//			System.out.println(link.getHrefAttribute());
-			if(PAGE_DISCOVERY){
-				totalPages.add(link.getHrefAttribute().split("\\?")[0]);
-			}
-			// Get before the question mark to not count each argument
-			// as a separate link.
-			if(visitedPages.contains(link.getHrefAttribute().split("\\?")[0])){
-//				System.out.println("Already read link : " + link.getHrefAttribute().split("\\?")[0]);
-				continue;
-			}
-			visitedPages.add(link.getHrefAttribute().split("\\?")[0]);
-			LinkFinder finder;
-			if(FUZZING_WEB_CLASS){
-				finder = new LinkFinder(SITE_ROOT + link.getHrefAttribute(), client);
-			}else{
-				finder = new LinkFinder(SITE + "/" + link.getHrefAttribute(), client);
-			}
-			getLinks(finder.findAllLinks());
-		}
-	}
-	
-	public static void runExploitsOnPage(String pageToExploit){
+	public static void runExploitsOnPage(URLTarget target){
 		
 	}
 	
-	private static void printLinks(){
+	private static void printLinks(List<URLTarget> targets){
 		System.out.println("\nAll links:\n\n");
-		for(String s : totalPages){
-			System.out.println(s);
+		for (URLTarget target : targets) {
+			System.out.println(target.page);
+			if (!target.getArgs.isEmpty()) {
+				System.out.println("	GET: " + Arrays.toString(target.getArgs.toArray(new String[]{})));
+			}
+			if (!target.postArgs.isEmpty()) {
+				System.out.println("	POST: " + Arrays.toString(target.postArgs.toArray(new String[]{})));
+			}
 		}
-		System.out.println("Total pages are : " + totalPages.size());
+		System.out.println("Total Targets: " + targets.size());
 	}
 }
