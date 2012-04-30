@@ -54,7 +54,6 @@ public class URLTarget {
 		ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
 		for (String param : postArgs) {
 			if (Config.IGNORE_INPUTS.contains(param)) {
-				System.out.println(param + " = " + sampleValues.get(param));
 				list.add(new NameValuePair(param, sampleValues.get(param)));
 			} else {
 				list.add(new NameValuePair(param, value));
