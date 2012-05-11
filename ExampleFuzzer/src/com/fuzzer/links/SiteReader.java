@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 import com.fuzzer.config.Config;
+import com.fuzzer.exploits.SQLInjectionExploit;
 import com.fuzzer.exploits.XSSExploit;
 import com.gargoylesoftware.htmlunit.WebClient;
 
@@ -23,6 +24,8 @@ public class SiteReader {
 		client = new WebClient();
 		client.setJavaScriptEnabled(true);
 		
+		PasswordAuth.login(client);
+		
 		URLFinder finder = new URLFinder(client);
 		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.findTargetsFrom(Config.TARGET) : finder.getTargetsOn(Config.TARGET);
 		printLinks(targets);
@@ -33,7 +36,8 @@ public class SiteReader {
 	}
 	
 	public static void runExploitsOnPage(URLTarget target){
-		XSSExploit.exploitBasicXSS(client, target);
+		XSSExploit.exploitForTarget(client, target);
+		SQLInjectionExploit.exploitForTarget(client, target);
 	}
 	
 	private static void printLinks(List<URLTarget> targets){

@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
-import org.apache.commons.logging.LogFactory;
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-
 public class Config {
 	public static final boolean TARGET_ONLY = true;
 	//public static final String TARGET = "http://vm549-03b.se.rit.edu/";
 	public static final String TARGET = "http://localhost:8080/bodgeit";
 	//public static final String TARGET = "http://www.alexanderzlatin.com/";
+
+	// Percent of values that should randomly be used.
+	public static final double RANDOM_USE = 0.5;
 	
 	public static final String LOGIN_URL = null;
 	public static final String LOGIN_USER = null;
@@ -36,17 +34,30 @@ public class Config {
 	
 	public static final List<String> IGNORE_INPUTS = Arrays.asList(new String[] {"access_token"});
 	
+
+	public static boolean shouldUse() {
+		return COMPLETE_PARSING || Math.random() <= Config.RANDOM_USE;
+	}
+	
 	
 	public static List<String> getSensitiveDataList() {
-		return getListFromFile("");
+		return getListFromFile("data/sensitive.txt");
 	}
 	
 	public static List<String> getSQLInjectionList() {
-		return getListFromFile("");
+		return getListFromFile("data/sql.txt");
 	}
 	
 	public static List<String> getXSSList() {
-		return getListFromFile("");
+		return getListFromFile("data/xss.txt");
+	}
+	
+	public static List<String> getPasswordList() {
+		return getListFromFile("data/passwords.txt");
+	}
+	
+	public static List<String> getPageList() {
+		return getListFromFile("data/pages.txt");
 	}
 	
 	public static List<String> getListFromFile(String filename) {
