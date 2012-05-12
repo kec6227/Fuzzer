@@ -1,5 +1,8 @@
 <script>alert(document.cookie);</script>
 <h1 onmouseover="alert(location.href);">LOLS<h1>
 <script>alert('XSS');</script>
+<body onload="alert('XSS');">
+<body onshow="alert('XSS');">
 1888888888888888888888888888888
 -1111111111111111111111111111
+<img src=javascript:alert('xss');>
