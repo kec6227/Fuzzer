@@ -32,7 +32,7 @@ public class Config {
 	public static final boolean COMPLETE_PARSING = true; //Random page/input when false
 	public static final boolean GUESS_PASSWORDS = false;
 	
-	public static final List<String> IGNORE_INPUTS = Arrays.asList(new String[] {"access_token"});
+	public static final List<String> IGNORE_INPUTS = Arrays.asList(new String[] {"access_token", "anticsrf"});
 	
 
 	public static boolean shouldUse() {
