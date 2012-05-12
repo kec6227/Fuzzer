@@ -19,6 +19,7 @@ public class PasswordAuth {
 		if (Config.LOGIN_URL == null) {
 			return;
 		}
+		System.out.println("Logging Into Site...");
 		HtmlPage page = null;
 		try {
 			page = wc.getPage(Config.LOGIN_URL);
@@ -49,6 +50,7 @@ public class PasswordAuth {
 			try {
 				HtmlSubmitInput submit = (HtmlSubmitInput) form.getFirstByXPath("//input[@type='submit']");
 				submit.click();
+				System.out.println("Logged In");
 			} catch (IOException e) {
 				System.out.println("Could Not Login To Site");
 			}

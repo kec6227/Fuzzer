@@ -36,6 +36,7 @@ public class SiteReader {
 	}
 	
 	public static void runExploitsOnPage(URLTarget target){
+		System.out.println("\nTesting Exploits On: " + target.page);
 		XSSExploit.exploitForTarget(client, target);
 		SQLInjectionExploit.exploitForTarget(client, target);
 	}
