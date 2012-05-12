@@ -42,7 +42,7 @@ public class SiteReader {
 	}
 	
 	private static void printLinks(List<URLTarget> targets){
-		System.out.println("\nAll links:");
+		System.out.println("\nAll Links:");
 		for (URLTarget target : targets) {
 			target.print();
 		}
