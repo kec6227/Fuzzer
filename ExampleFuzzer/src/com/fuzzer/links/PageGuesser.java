@@ -11,7 +11,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 
 public class PageGuesser {
 
-	private static List<String> DATA = Config.getSensitiveDataList();
+	private static List<String> DATA = Config.getPageList();
 	
 	public static List<String> guessPaths(WebClient wc, String base) {
 		List<String> found = new ArrayList<String>();

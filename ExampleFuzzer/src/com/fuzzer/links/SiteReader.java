@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import com.fuzzer.config.Config;
 import com.fuzzer.exploits.PasswordExploit;
 import com.fuzzer.exploits.SQLInjectionExploit;
+import com.fuzzer.exploits.SensitiveDataExploit;
 import com.fuzzer.exploits.XSSExploit;
 import com.gargoylesoftware.htmlunit.WebClient;
 
@@ -33,16 +34,23 @@ public class SiteReader {
 		
 		URLFinder finder = new URLFinder(client);
 		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.findTargetsFrom(Config.TARGET) : finder.getTargetsOn(Config.TARGET);
-		printLinks(targets);
 		
 		if (Config.PAGE_GUESSING) {
-			System.out.println("Searching for Pages: ");
+			System.out.println("\nSearching for Pages: ");
 			List<String> guessed = PageGuesser.guessPaths(client, Config.TARGET);
 			for (String page : guessed) {
-				System.out.println("Found Page: " + page);
+				System.out.println("Found Hidden Page: " + page);
+				targets.addAll(finder.findTargetsFrom(page));
+				targets = URLFinder.mergeTargets(targets);
 			}
 		}
-		
+
+		System.out.println();
+		System.out.println("------------------------------------------------------------------------");
+		System.out.println("RESULTS");
+		System.out.println("------------------------------------------------------------------------");
+		printLinks(targets);
+
 		for (URLTarget target : targets) {
 			if (Config.shouldUse()) {
 				runExploitsOnPage(target);
@@ -52,6 +60,7 @@ public class SiteReader {
 	
 	public static void runExploitsOnPage(URLTarget target){
 		System.out.println("\nTesting Exploits On: " + target.page);
+		SensitiveDataExploit.checkForSensitiveData(target.originalContent);
 		XSSExploit.exploitForTarget(client, target);
 		SQLInjectionExploit.exploitForTarget(client, target);
 	}

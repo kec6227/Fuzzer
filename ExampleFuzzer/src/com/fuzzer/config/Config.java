@@ -11,17 +11,17 @@ import java.util.Arrays;
 public class Config {
 	public static final boolean TARGET_ONLY = true;
 	//public static final String TARGET = "http://vm549-03b.se.rit.edu/";
-	public static final String TARGET = "http://localhost:8080/bodgeit";
+	public static final String TARGET = "http://hugecase-beta.student.rit.edu:8080/bodgeit/";
 	//public static final String TARGET = "http://www.alexanderzlatin.com/";
 
 	// Percent of values that should randomly be used.
 	public static final double RANDOM_USE = 0.5;
 	
-	public static final String LOGIN_URL = null;
-	public static final String LOGIN_USER = null;
-	public static final String LOGIN_USER_FIELD = null;
-	public static final String LOGIN_PASS = null;
-	public static final String LOGIN_PASS_FIELD = null;
+	public static final String LOGIN_URL = "http://hugecase-beta.student.rit.edu:8080/bodgeit/login.jsp";
+	public static final String LOGIN_USER = "' or ''='";
+	public static final String LOGIN_USER_FIELD = "username";
+	public static final String LOGIN_PASS = "' or ''='";
+	public static final String LOGIN_PASS_FIELD = "password";
 	public static final boolean LOGIN_GUESS_PASSWORDS = false;
 
 	

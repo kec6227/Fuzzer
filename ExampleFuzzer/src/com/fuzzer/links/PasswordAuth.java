@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 
@@ -17,6 +18,9 @@ public class PasswordAuth {
 	
 	public static void login(WebClient wc) {
 		if (Config.LOGIN_URL == null) {
+			return;
+		}
+		if (!Config.LOGIN_URL.startsWith(Config.TARGET)) {
 			return;
 		}
 		System.out.println("Logging Into Site...");
@@ -43,7 +47,7 @@ public class PasswordAuth {
 				}
 			}
 			
-			final HtmlTextInput passField;
+			final HtmlPasswordInput passField;
 			try {
 				passField = form.getInputByName(Config.LOGIN_PASS_FIELD);
 				passField.setValueAttribute(Config.LOGIN_PASS);

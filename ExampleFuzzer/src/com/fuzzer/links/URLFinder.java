@@ -33,6 +33,7 @@ public class URLFinder {
 		Queue<String> queue = new ConcurrentLinkedQueue<String>();
 		HashSet<String> visited = new HashSet<String>();
 		
+		targets.add(new URLTarget(url));
 		queue.add(url);
 		
 		while (!queue.isEmpty()) {
@@ -46,10 +47,6 @@ public class URLFinder {
 			for (URLTarget sample : found) {
 				queue.addAll(sample.samplePages);
 			}
-			try {
-				Thread.sleep(Config.TIME_GAP_MS);
-			} catch (InterruptedException e) {
-			}
 		}
 		
 		if (Config.PAGE_INPUT_MERGE) {
@@ -61,7 +58,7 @@ public class URLFinder {
 	
 	
 	public ArrayList<URLTarget> getTargetsOn(String url) {
-		System.out.println("\nFinding ALL Links On: " + url);
+		System.out.println("Finding ALL Links On: " + url);
 		HtmlPage page = null;
 		
 		try {
@@ -88,10 +85,15 @@ public class URLFinder {
 			targets = mergeTargets(targets);
 		}
 		
+		try {
+			Thread.sleep(Config.TIME_GAP_MS);
+		} catch (InterruptedException e) {
+		}
+		
 		return targets;
 	}
 	
-	public ArrayList<URLTarget> mergeTargets(ArrayList<URLTarget> targets) {
+	public static ArrayList<URLTarget> mergeTargets(List<URLTarget> targets) {
 		HashMap<String, URLTarget> targetMap = new HashMap<String, URLTarget>();
 		for (URLTarget target : targets) {
 			if (targetMap.containsKey(target.page)) {
@@ -99,6 +101,10 @@ public class URLFinder {
 				existing.samplePages.addAll(target.samplePages);
 				existing.getArgs.addAll(target.getArgs);
 				existing.postArgs.addAll(target.postArgs);
+				existing.sampleValues.putAll(target.sampleValues);
+				if (existing.originalContent.isEmpty() && !target.originalContent.isEmpty()) {
+					existing.originalContent = target.originalContent;
+				}
 			} else {
 				targetMap.put(target.page, target);
 			}
