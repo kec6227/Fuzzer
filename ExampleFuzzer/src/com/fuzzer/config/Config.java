@@ -22,6 +22,7 @@ public class Config {
 	public static final String LOGIN_USER_FIELD = null;
 	public static final String LOGIN_PASS = null;
 	public static final String LOGIN_PASS_FIELD = null;
+	public static final boolean LOGIN_GUESS_PASSWORDS = false;
 
 	
 	public static final long TIME_GAP_MS = 50;
@@ -30,7 +31,6 @@ public class Config {
 	public static final boolean PAGE_DISCOVERY = true;
 	public static final boolean PAGE_GUESSING = false;
 	public static final boolean COMPLETE_PARSING = true; //Random page/input when false
-	public static final boolean GUESS_PASSWORDS = false;
 	
 	public static final List<String> IGNORE_INPUTS = Arrays.asList(new String[] {"access_token", "anticsrf"});
 	

@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 import com.fuzzer.config.Config;
+import com.fuzzer.exploits.PasswordCrack;
 import com.fuzzer.exploits.SQLInjectionExploit;
 import com.fuzzer.exploits.XSSExploit;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -24,7 +25,11 @@ public class SiteReader {
 		client = new WebClient();
 		client.setJavaScriptEnabled(true);
 		
-		PasswordAuth.login(client);
+		if (!Config.LOGIN_GUESS_PASSWORDS) {
+			PasswordAuth.login(client);
+		} else {
+			PasswordCrack.crack(client);
+		}
 		
 		URLFinder finder = new URLFinder(client);
 		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.findTargetsFrom(Config.TARGET) : finder.getTargetsOn(Config.TARGET);

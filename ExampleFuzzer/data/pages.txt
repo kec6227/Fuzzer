@@ -2,3 +2,7 @@ admin/
 administration/
 config/
 secret/
+admin.jsp
+conf/
+admin.php
+
