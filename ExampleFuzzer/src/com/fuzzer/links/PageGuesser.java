@@ -9,7 +9,7 @@ import com.fuzzer.config.Config;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 
-public class FileGuesser {
+public class PageGuesser {
 
 	private static List<String> DATA = Config.getSensitiveDataList();
 	

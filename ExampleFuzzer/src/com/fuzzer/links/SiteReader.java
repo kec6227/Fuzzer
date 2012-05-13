@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 import com.fuzzer.config.Config;
-import com.fuzzer.exploits.PasswordCrack;
+import com.fuzzer.exploits.PasswordExploit;
 import com.fuzzer.exploits.SQLInjectionExploit;
 import com.fuzzer.exploits.XSSExploit;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -28,7 +28,7 @@ public class SiteReader {
 		if (!Config.LOGIN_GUESS_PASSWORDS) {
 			PasswordAuth.login(client);
 		} else {
-			PasswordCrack.crack(client);
+			PasswordExploit.crack(client);
 		}
 		
 		URLFinder finder = new URLFinder(client);
@@ -37,7 +37,7 @@ public class SiteReader {
 		
 		if (Config.PAGE_GUESSING) {
 			System.out.println("Searching for Pages: ");
-			List<String> guessed = FileGuesser.guessPaths(client, Config.TARGET);
+			List<String> guessed = PageGuesser.guessPaths(client, Config.TARGET);
 			for (String page : guessed) {
 				System.out.println("Found Page: " + page);
 			}

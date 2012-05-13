@@ -187,6 +187,9 @@ public class URLFinder {
 		// Create the target
 		URLTarget target = new URLTarget(fqUrl.toExternalForm().split("\\?|\\#")[0]);
 		target.samplePages.add(fqUrl.toExternalForm());
+		if (target.originalContent.isEmpty()) {
+			target.originalContent = page.getWebResponse().getContentAsString();
+		}
 		if (fqUrl.getQuery() != null) {
 			for (String param : fqUrl.getQuery().split("&")) {
 	            String pair[] = param.split("=");

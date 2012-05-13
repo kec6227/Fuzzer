@@ -23,6 +23,8 @@ public class URLTarget {
 	
 	public HashMap<String,String> sampleValues;
 	
+	public String originalContent = "";
+	
 	public URLTarget(String page) {
 		this.page = page;
 		samplePages = new HashSet<String>();
