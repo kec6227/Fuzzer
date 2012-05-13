@@ -29,7 +29,7 @@ public class Config {
 	public static final boolean PAGE_INPUT_MERGE = true;
 	
 	public static final boolean PAGE_DISCOVERY = true;
-	public static final boolean PAGE_GUESSING = false;
+	public static final boolean PAGE_GUESSING = true;
 	public static final boolean COMPLETE_PARSING = true; //Random page/input when false
 	
 	public static final List<String> IGNORE_INPUTS = Arrays.asList(new String[] {"access_token", "anticsrf"});
