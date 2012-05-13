@@ -30,8 +30,18 @@ public class SiteReader {
 		List<URLTarget> targets = Config.PAGE_DISCOVERY ? finder.findTargetsFrom(Config.TARGET) : finder.getTargetsOn(Config.TARGET);
 		printLinks(targets);
 		
+		if (Config.PAGE_GUESSING) {
+			System.out.println("Searching for Pages: ");
+			List<String> guessed = FileGuesser.guessPaths(client, Config.TARGET);
+			for (String page : guessed) {
+				System.out.println("Found Page: " + page);
+			}
+		}
+		
 		for (URLTarget target : targets) {
-			runExploitsOnPage(target);
+			if (Config.shouldUse()) {
+				runExploitsOnPage(target);
+			}
 		}
 	}
 	
