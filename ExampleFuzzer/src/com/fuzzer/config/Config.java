@@ -9,32 +9,47 @@ import java.util.List;
 import java.util.Arrays;
 
 public class Config {
-	public static final boolean TARGET_ONLY = true;
+	// The target to fuzz
 	//public static final String TARGET = "http://vm549-03b.se.rit.edu/";
 	public static final String TARGET = "http://hugecase-beta.student.rit.edu:8080/bodgeit/";
-	//public static final String TARGET = "http://www.alexanderzlatin.com/";
 
-	// Percent of values that should randomly be used.
+	// Fuzz only pages on the same host as the target
+	public static final boolean TARGET_ONLY = true;
+
+	// Test all possible combinations
+	public static final boolean COMPLETE_PARSING = true;
+	// Percent of values that should randomly be used if COMPLETE_PARSING = false
 	public static final double RANDOM_USE = 0.5;
 	
+	// Use these settings to login before fuzzing
 	public static final String LOGIN_URL = "http://hugecase-beta.student.rit.edu:8080/bodgeit/login.jsp";
 	public static final String LOGIN_USER = "' or ''='";
 	public static final String LOGIN_USER_FIELD = "username";
 	public static final String LOGIN_PASS = "' or ''='";
 	public static final String LOGIN_PASS_FIELD = "password";
+	
+	// Set this to true to brute force LOGIN_PASS value
 	public static final boolean LOGIN_GUESS_PASSWORDS = false;
 
-	
+	// Time to wait between page requests
 	public static final long TIME_GAP_MS = 50;
+	
+	// If a page accepts different combinations of inputs, should they be merged?
 	public static final boolean PAGE_INPUT_MERGE = true;
 	
+	// Should we attempt to discover all pages or just those linked from TARGET?
 	public static final boolean PAGE_DISCOVERY = true;
-	public static final boolean PAGE_GUESSING = true;
-	public static final boolean COMPLETE_PARSING = true; //Random page/input when false
 	
+	// Should we attempt to find hidden pages?
+	public static final boolean PAGE_GUESSING = true;
+	
+	// List of POSt and GET params that should not be fuzzed.
 	public static final List<String> IGNORE_INPUTS = Arrays.asList(new String[] {"access_token", "anticsrf"});
 	
-
+	///////////////////////////////////////////////////////////////////////////
+	// END OF CONFIG
+	///////////////////////////////////////////////////////////////////////////
+	
 	public static boolean shouldUse() {
 		return COMPLETE_PARSING || Math.random() <= Config.RANDOM_USE;
 	}
